@@ -2,30 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Add Account | Mr Ahmed Ali</title>
+  <title>Login | Mr Ahmed Ali</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <style>
+    body { background:#f5f6fa; }
     .login-container {
       max-width: 370px;
       background: #fff;
-      margin: 4em auto 0 auto;
+      margin: 5em auto 0 auto;
       padding: 2.2em 2.2em 1.6em 2.2em;
       border-radius: 14px;
       box-shadow: 0 4px 18px rgba(30,40,50,0.10);
       text-align: center;
     }
-    .login-container h2 { margin-bottom: 1.5em; font-size: 1.6em; }
-    .login-field { margin-bottom: 1.2em; text-align: left; }
+    .login-container h2 { margin-bottom: 1.4em; font-size: 1.6em; }
+    .login-field { margin-bottom: 1.1em; text-align: left; }
     .login-field label { display: block; font-weight: 600; margin-bottom: 0.25em; }
     .login-field input[type="email"],
     .login-field input[type="password"] {
       width: 100%; padding: 0.65em; border-radius: 7px; border: 1px solid #bbb; font-size: 1.07em;
     }
-    .login-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.4em; }
+    .login-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.3em; }
     .login-actions label { font-size: 0.98em; font-weight: 500; }
     .login-btn, .signup-btn {
-      background: var(--accent);
+      background: var(--accent,#305080);
       color: #fff;
       font-weight: 700;
       border: none;
@@ -37,10 +38,10 @@
       margin-bottom: 1.2em;
       margin-top: 0.3em;
     }
-    .login-error {
+    .login-error, .signup-error {
       color: #c00;
       font-weight: 600;
-      margin-bottom: 1em;
+      margin-bottom: 0.7em;
       min-height: 1.5em;
       text-align: center;
     }
@@ -50,9 +51,48 @@
     }
   </style>
 </head>
-<!-- ...head and style as before... -->
 <body>
-  <!-- ...header and form as before... -->
+  <header>
+    <div class="container header-flex">
+      <a href="main.html" class="site-title">Mr Ahmed Ali</a>
+    </div>
+  </header>
+  <main>
+    <div class="container main-content">
+      <section class="login-container">
+        <h2>Sign In / Sign Up</h2>
+        <form id="loginForm" autocomplete="off">
+          <div class="login-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" required autocomplete="username">
+          </div>
+          <div class="login-field">
+            <label for="password">Password</label>
+            <input type="password" id="password" required autocomplete="current-password">
+          </div>
+          <div class="login-actions">
+            <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+          </div>
+          <div class="login-error" id="errorMsg"></div>
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+        <div class="divider">or</div>
+        <form id="signupForm" autocomplete="off">
+          <div class="login-field">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required autocomplete="username">
+          </div>
+          <div class="login-field">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required autocomplete="new-password">
+          </div>
+          <div class="signup-error" id="signupErrorMsg"></div>
+          <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <!-- Firebase SDKs (modules, always load app/auth) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
   <script>
@@ -69,7 +109,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Login
+    // LOGIN
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -88,7 +128,7 @@
           if (email.toLowerCase() === "teacher@admin.com") {
             window.location.href = 'admin.html';
           } else {
-            window.location.href = 'index.html';
+            window.location.href = 'main.html';
           }
         })
         .catch(err => {
@@ -100,7 +140,7 @@
         });
     });
 
-    // Sign Up (same as previous code, but no admin privilege)
+    // SIGN UP
     document.getElementById('signupForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('signup-email').value.trim();
@@ -113,7 +153,7 @@
           if (email.toLowerCase() === "teacher@admin.com") {
             window.location.href = 'admin.html';
           } else {
-            window.location.href = 'index.html';
+            window.location.href = 'main.html';
           }
         })
         .catch(err => {
