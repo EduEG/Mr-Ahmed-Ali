@@ -24,7 +24,7 @@
     }
     .login-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.4em; }
     .login-actions label { font-size: 0.98em; font-weight: 500; }
-    .login-btn {
+    .login-btn, .signup-btn {
       background: var(--accent);
       color: #fff;
       font-weight: 700;
@@ -35,6 +35,7 @@
       font-size: 1.07em;
       width: 100%;
       margin-bottom: 1.2em;
+      margin-top: 0.3em;
     }
     .login-error {
       color: #c00;
@@ -42,6 +43,10 @@
       margin-bottom: 1em;
       min-height: 1.5em;
       text-align: center;
+    }
+    .divider {
+      margin: 1.2em 0 0.8em 0;
+      text-align: center; color: #888;
     }
   </style>
 </head>
@@ -58,11 +63,11 @@
         <form id="loginForm" autocomplete="off">
           <div class="login-field">
             <label for="email">Email</label>
-            <input type="email" id="email" required autocomplete="username">
+            <input type="email" id="email" required autocomplete="username" placeholder="teacher">
           </div>
           <div class="login-field">
             <label for="password">Password</label>
-            <input type="password" id="password" required autocomplete="current-password">
+            <input type="password" id="password" required autocomplete="current-password" placeholder="n8k20068">
           </div>
           <div class="login-actions">
             <label><input type="checkbox" id="rememberMe"> Remember Me</label>
@@ -70,14 +75,25 @@
           <div class="login-error" id="errorMsg"></div>
           <button type="submit" class="login-btn">Login</button>
         </form>
+        <div class="divider">or</div>
+        <form id="signupForm" autocomplete="off">
+          <div class="login-field">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required autocomplete="username">
+          </div>
+          <div class="login-field">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required autocomplete="new-password">
+          </div>
+          <div class="login-error" id="signupErrorMsg"></div>
+          <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
       </section>
     </div>
   </main>
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
   <script>
-    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCAas2BelfwoxP2gEKCHeV67ksXOFyx73w",
       authDomain: "admin-panel-fdcf8.firebaseapp.com",
@@ -91,7 +107,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Set persistence based on Remember Me
+    // Login
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -99,21 +115,15 @@
       const rememberMe = document.getElementById('rememberMe').checked;
       const errorMsg = document.getElementById('errorMsg');
       errorMsg.textContent = '';
+
       let persistence = rememberMe ?
         firebase.auth.Auth.Persistence.LOCAL :
         firebase.auth.Auth.Persistence.SESSION;
+
       auth.setPersistence(persistence)
         .then(() => auth.signInWithEmailAndPassword(email, password))
         .then((cred) => {
-          // Only allow teacher user into admin.html
-          // Firebase uses email for authentication, so use teacher@domain.com for teacher login
-          // If you registered the teacher user as "teacher" (username) and not email, update this check accordingly
-          // For this code, let's assume teacher account email is "teacher@admin.com"
-          // If you want to use "teacher" as email, you'll need to register that exact email in Firebase
-          if (
-            (email.toLowerCase() === "teacher" || email.toLowerCase() === "teacher@admin.com")
-            && password === "n8k20068"
-          ) {
+          if (email.toLowerCase() === "teacher" && password === "n8k20068") {
             window.location.href = 'admin.html';
           } else {
             window.location.href = 'index.html';
@@ -125,6 +135,32 @@
           if (err.code === 'auth/wrong-password') msg = "Incorrect password.";
           if (err.code === 'auth/invalid-email') msg = "Invalid email address.";
           errorMsg.textContent = msg;
+        });
+    });
+
+    // Sign Up
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const signupErrorMsg = document.getElementById('signupErrorMsg');
+      signupErrorMsg.textContent = '';
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((cred) => {
+          // After sign up, log them in and redirect (teacher special case)
+          if (email.toLowerCase() === "teacher" && password === "n8k20068") {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'index.html';
+          }
+        })
+        .catch(err => {
+          let msg = "Could not sign up. Please check your details.";
+          if (err.code === 'auth/email-already-in-use') msg = "Email is already in use.";
+          if (err.code === 'auth/weak-password') msg = "Password should be at least 6 characters.";
+          if (err.code === 'auth/invalid-email') msg = "Invalid email address.";
+          signupErrorMsg.textContent = msg;
         });
     });
   </script>
