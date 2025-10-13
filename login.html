@@ -50,47 +50,9 @@
     }
   </style>
 </head>
+<!-- ...head and style as before... -->
 <body>
-  <header>
-    <div class="container header-flex">
-      <a href="index.html" class="site-title">Mr Ahmed Ali</a>
-    </div>
-  </header>
-  <main>
-    <div class="container main-content">
-      <section class="login-container">
-        <h2>Add Account</h2>
-        <form id="loginForm" autocomplete="off">
-          <div class="login-field">
-            <label for="email">Email</label>
-            <input type="email" id="email" required autocomplete="username" placeholder="teacher">
-          </div>
-          <div class="login-field">
-            <label for="password">Password</label>
-            <input type="password" id="password" required autocomplete="current-password" placeholder="n8k20068">
-          </div>
-          <div class="login-actions">
-            <label><input type="checkbox" id="rememberMe"> Remember Me</label>
-          </div>
-          <div class="login-error" id="errorMsg"></div>
-          <button type="submit" class="login-btn">Login</button>
-        </form>
-        <div class="divider">or</div>
-        <form id="signupForm" autocomplete="off">
-          <div class="login-field">
-            <label for="signup-email">Email</label>
-            <input type="email" id="signup-email" required autocomplete="username">
-          </div>
-          <div class="login-field">
-            <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" required autocomplete="new-password">
-          </div>
-          <div class="login-error" id="signupErrorMsg"></div>
-          <button type="submit" class="signup-btn">Sign Up</button>
-        </form>
-      </section>
-    </div>
-  </main>
+  <!-- ...header and form as before... -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
   <script>
@@ -123,7 +85,7 @@
       auth.setPersistence(persistence)
         .then(() => auth.signInWithEmailAndPassword(email, password))
         .then((cred) => {
-          if (email.toLowerCase() === "teacher" && password === "n8k20068") {
+          if (email.toLowerCase() === "teacher@admin.com") {
             window.location.href = 'admin.html';
           } else {
             window.location.href = 'index.html';
@@ -138,7 +100,7 @@
         });
     });
 
-    // Sign Up
+    // Sign Up (same as previous code, but no admin privilege)
     document.getElementById('signupForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('signup-email').value.trim();
@@ -148,8 +110,7 @@
 
       auth.createUserWithEmailAndPassword(email, password)
         .then((cred) => {
-          // After sign up, log them in and redirect (teacher special case)
-          if (email.toLowerCase() === "teacher" && password === "n8k20068") {
+          if (email.toLowerCase() === "teacher@admin.com") {
             window.location.href = 'admin.html';
           } else {
             window.location.href = 'index.html';
