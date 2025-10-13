@@ -15,46 +15,37 @@
   </header>
   <nav id="sidebar" class="sidebar">
     <ul class="grade-menu">
+      <li class="grade-item"><a href="admin.html" style="font-weight:700;color:var(--accent);padding:0.9em 0.6em 0.9em 0.7em;display:block;">Upload</a></li>
       <li class="grade-item">
-        <button class="grade-toggle" aria-expanded="false">
-          Prep 2 <span class="arrow">&#8250;</span>
-        </button>
+        <button class="grade-toggle" aria-expanded="false">Prep 2 <span class="arrow">&#8250;</span></button>
         <ul class="submenu">
           <li><a href="prep2-lessons.html">Lessons</a></li>
           <li><a href="prep2-rules.html">Rules</a></li>
         </ul>
       </li>
       <li class="grade-item">
-        <button class="grade-toggle" aria-expanded="false">
-          Prep 3 <span class="arrow">&#8250;</span>
-        </button>
+        <button class="grade-toggle" aria-expanded="false">Prep 3 <span class="arrow">&#8250;</span></button>
         <ul class="submenu">
           <li><a href="prep3-lessons.html">Lessons</a></li>
           <li><a href="prep3-rules.html">Rules</a></li>
         </ul>
       </li>
       <li class="grade-item">
-        <button class="grade-toggle" aria-expanded="false">
-          Secondary 1 <span class="arrow">&#8250;</span>
-        </button>
+        <button class="grade-toggle" aria-expanded="false">Secondary 1 <span class="arrow">&#8250;</span></button>
         <ul class="submenu">
           <li><a href="sec1-lessons.html">Lessons</a></li>
           <li><a href="sec1-rules.html">Rules</a></li>
         </ul>
       </li>
       <li class="grade-item">
-        <button class="grade-toggle" aria-expanded="false">
-          Secondary 2 <span class="arrow">&#8250;</span>
-        </button>
+        <button class="grade-toggle" aria-expanded="false">Secondary 2 <span class="arrow">&#8250;</span></button>
         <ul class="submenu">
           <li><a href="sec2-lessons.html">Lessons</a></li>
           <li><a href="sec2-rules.html">Rules</a></li>
         </ul>
       </li>
       <li class="grade-item">
-        <button class="grade-toggle" aria-expanded="false">
-          Secondary 3 <span class="arrow">&#8250;</span>
-        </button>
+        <button class="grade-toggle" aria-expanded="false">Secondary 3 <span class="arrow">&#8250;</span></button>
         <ul class="submenu">
           <li><a href="sec3-lessons.html">Lessons</a></li>
           <li><a href="sec3-rules.html">Rules</a></li>
@@ -75,41 +66,27 @@
     </div>
   </main>
   <script src="script.js"></script>
+  <!-- Firebase Redirect for Authenticated Access -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCAas2BelfwoxP2gEKCHeV67ksXOFyx73w",
-    authDomain: "admin-panel-fdcf8.firebaseapp.com",
-    databaseURL: "https://admin-panel-fdcf8-default-rtdb.firebaseio.com/",
-    projectId: "admin-panel-fdcf8",
-    storageBucket: "admin-panel-fdcf8.firebasestorage.app",
-    messagingSenderId: "618047746883",
-    appId: "1:618047746883:web:12849ada958f157f9975f6",
-    measurementId: "G-J7NL949LX4"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  // On page load, check auth state
-  auth.onAuthStateChanged(function(user) {
-    if (!user) {
-      window.location.href = "login.html";
-    } else {
-      // If admin, show Upload in sidebar
-      if (user.email.toLowerCase() === "teacher" || user.email.toLowerCase() === "teacher@admin.com") {
-        // Add "Upload" to sidebar menu dynamically
-        const gradeMenu = document.querySelector('.grade-menu');
-        if (gradeMenu && !document.getElementById("upload-menu-item")) {
-          const li = document.createElement('li');
-          li.className = 'grade-item';
-          li.id = 'upload-menu-item';
-          li.innerHTML = `<a href="admin.html" style="font-weight:700;color:var(--accent);padding:0.9em 0.6em 0.9em 0.7em;display:block;">Upload</a>`;
-          gradeMenu.appendChild(li);
-        }
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCAas2BelfwoxP2gEKCHeV67ksXOFyx73w",
+      authDomain: "admin-panel-fdcf8.firebaseapp.com",
+      databaseURL: "https://admin-panel-fdcf8-default-rtdb.firebaseio.com/",
+      projectId: "admin-panel-fdcf8",
+      storageBucket: "admin-panel-fdcf8.firebasestorage.app",
+      messagingSenderId: "618047746883",
+      appId: "1:618047746883:web:12849ada958f157f9975f6",
+      measurementId: "G-J7NL949LX4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    auth.onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = "login.html";
       }
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
