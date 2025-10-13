@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel | Mr Ahmed Ali</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-flex">
+      <a href="index.html" class="site-title">Mr Ahmed Ali</a>
+      <button class="hamburger" id="menu-toggle" aria-label="Open Menu">&#9776;</button>
+      <button id="logoutBtn" style="margin-left:1em;background:var(--accent);color:#fff;padding:0.4em 1em;border:none;border-radius:6px;cursor:pointer;display:none;">Logout</button>
+    </div>
+  </header>
+  <!-- Sidebar Navigation -->
+  <nav id="sidebar" class="sidebar">
+    <ul class="grade-menu">
+      <li class="grade-item">
+        <button class="grade-toggle" aria-expanded="false">
+          Prep 2 <span class="arrow">&#8250;</span>
+        </button>
+        <ul class="submenu">
+          <li><a href="prep2-lessons.html">Lessons</a></li>
+          <li><a href="prep2-rules.html">Rules</a></li>
+        </ul>
+      </li>
+      <li class="grade-item">
+        <button class="grade-toggle" aria-expanded="false">
+          Prep 3 <span class="arrow">&#8250;</span>
+        </button>
+        <ul class="submenu">
+          <li><a href="prep3-lessons.html">Lessons</a></li>
+          <li><a href="prep3-rules.html">Rules</a></li>
+        </ul>
+      </li>
+      <li class="grade-item">
+        <button class="grade-toggle" aria-expanded="false">
+          Secondary 1 <span class="arrow">&#8250;</span>
+        </button>
+        <ul class="submenu">
+          <li><a href="sec1-lessons.html">Lessons</a></li>
+          <li><a href="sec1-rules.html">Rules</a></li>
+        </ul>
+      </li>
+      <li class="grade-item">
+        <button class="grade-toggle" aria-expanded="false">
+          Secondary 2 <span class="arrow">&#8250;</span>
+        </button>
+        <ul class="submenu">
+          <li><a href="sec2-lessons.html">Lessons</a></li>
+          <li><a href="sec2-rules.html">Rules</a></li>
+        </ul>
+      </li>
+      <li class="grade-item">
+        <button class="grade-toggle" aria-expanded="false">
+          Secondary 3 <span class="arrow">&#8250;</span>
+        </button>
+        <ul class="submenu">
+          <li><a href="sec3-lessons.html">Lessons</a></li>
+          <li><a href="sec3-rules.html">Rules</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+  <main>
+    <div class="container main-content">
+      <section class="ad-section">
+        <div class="ad-space"><span>Ad Space</span></div>
+      </section>
+      <section>
+        <h2 id="welcomeMsg" style="text-align:center;"></h2>
+        <form id="videoForm" class="videos-form" autocomplete="off" style="max-width: 420px; margin: 0 auto;">
+          <div style="margin-bottom:1.1em;">
+            <label for="videoTitle" style="display:block; font-weight:600; margin-bottom:0.3em;">Video Title</label>
+            <input type="text" id="videoTitle" name="videoTitle" required style="width:100%;padding:0.6em;border-radius:6px;border:1px solid #bbb;">
+          </div>
+          <div style="margin-bottom:1.1em;">
+            <label for="youtubeLink" style="display:block; font-weight:600; margin-bottom:0.3em;">YouTube Link</label>
+            <input type="url" id="youtubeLink" name="youtubeLink" required style="width:100%;padding:0.6em;border-radius:6px;border:1px solid #bbb;">
+          </div>
+          <div style="margin-bottom:1.1em;">
+            <label for="grade" style="display:block; font-weight:600; margin-bottom:0.3em;">Grade</label>
+            <select id="grade" name="grade" required style="width:100%;padding:0.6em;border-radius:6px;border:1px solid #bbb;">
+              <option value="">Select Grade</option>
+              <option value="Prep2">Prep 2</option>
+              <option value="Prep3">Prep 3</option>
+              <option value="Sec1">Secondary 1</option>
+              <option value="Sec2">Secondary 2</option>
+              <option value="Sec3">Secondary 3</option>
+            </select>
+          </div>
+          <button type="submit" style="background:var(--accent);color:#fff;font-weight:700;border:none;border-radius:7px;padding:0.7em 1.4em;cursor:pointer;font-size:1.07em;">Publish</button>
+          <div id="successMsg" style="display:none;margin-top:1.3em;color:green;font-weight:600;">✔ Video published successfully!</div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCAas2BelfwoxP2gEKCHeV67ksXOFyx73w",
+      authDomain: "admin-panel-fdcf8.firebaseapp.com",
+      databaseURL: "https://admin-panel-fdcf8-default-rtdb.firebaseio.com/",
+      projectId: "admin-panel-fdcf8",
+      storageBucket: "admin-panel-fdcf8.firebasestorage.app",
+      messagingSenderId: "618047746883",
+      appId: "1:618047746883:web:12849ada958f157f9975f6",
+      measurementId: "G-J7NL949LX4"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Protect page: Only allow teacher access
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      } else {
+        // Only allow teacher@admin.com or "teacher" with password "n8k20068"
+        // You may need to match the email used when creating the teacher account
+        const allowed = (
+          user.email.toLowerCase() === "teacher" ||
+          user.email.toLowerCase() === "teacher@admin.com"
+        );
+        if (!allowed) {
+          window.location.href = "index.html";
+          return;
+        }
+        document.getElementById("welcomeMsg").textContent = "Welcome, " + user.email;
+        document.getElementById("logoutBtn").style.display = "inline-block";
+      }
+    });
+
+    // Logout functionality
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+      auth.signOut().then(function() {
+        window.location.href = "login.html";
+      });
+    });
+
+    // Helper: Extract YouTube video ID from URL
+    function extractVideoId(url) {
+      let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+      let match = url.match(regExp);
+      return (match && match[7].length == 11) ? match[7] : '';
+    }
+
+    // Video form submit handler
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('videoForm');
+      const successMsg = document.getElementById('successMsg');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        successMsg.style.display = 'none';
+
+        // Get field values
+        const title = form.videoTitle.value.trim();
+        const link = form.youtubeLink.value.trim();
+        const grade = form.grade.value;
+        const videoId = extractVideoId(link);
+
+        if (!title || !link || !grade || !videoId) {
+          alert("Please fill all fields correctly and provide a valid YouTube link.");
+          return;
+        }
+
+        // Save to Firebase
+        try {
+          await db.ref('videos/' + grade).push({ title, link, videoId });
+          successMsg.style.display = 'block';
+          form.reset();
+        } catch (err) {
+          alert("Error publishing video: " + err.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
